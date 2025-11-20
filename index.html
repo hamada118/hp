@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>株式会社ハマコー - AIで未来を創造する</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">株式会社ハマコー</div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">ホーム</a></li>
+                <li><a href="#about" class="nav-link">会社概要</a></li>
+                <li><a href="#services" class="nav-link">サービス</a></li>
+                <li><a href="#contact" class="nav-link">お問い合わせ</a></li>
+            </ul>
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle" aria-label="ダークモード切り替え">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ヒーローセクション（3Dアニメーション付き） -->
+    <section id="home" class="hero">
+        <div id="canvas-container"></div>
+        <!-- 天気ウィジェット -->
+        <div class="weather-widget fade-in">
+            <div class="weather-content">
+                <div class="weather-location">
+                    <span class="location-icon">📍</span>
+                    <span>鹿児島市</span>
+                </div>
+                <div class="weather-main">
+                    <div class="weather-icon" id="weatherIcon">☀️</div>
+                    <div class="weather-info">
+                        <div class="weather-temp" id="weatherTemp">--°C</div>
+                        <div class="weather-desc" id="weatherDesc">--</div>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="weather-detail-item">
+                        <span class="detail-label">湿度</span>
+                        <span class="detail-value" id="weatherHumidity">--%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- おみくじウィジェット -->
+        <div class="omikuji-widget fade-in">
+            <button class="omikuji-button" id="omikujiButton" aria-label="おみくじを引く">
+                <span class="omikuji-icon">🎋</span>
+                <span class="omikuji-text">おみくじ</span>
+            </button>
+            <div class="omikuji-result" id="omikujiResult" style="display: none;">
+                <div class="omikuji-result-content">
+                    <div class="omikuji-result-icon" id="omikujiResultIcon">🎋</div>
+                    <div class="omikuji-result-text" id="omikujiResultText">大吉</div>
+                    <button class="omikuji-close" id="omikujiClose" aria-label="閉じる">×</button>
+                </div>
+            </div>
+        </div>
+        <!-- お絵かきウィジェット -->
+        <div class="drawing-widget fade-in">
+            <button class="drawing-button" id="drawingButton" aria-label="お絵かきを開く">
+                <span class="drawing-icon">🎨</span>
+                <span class="drawing-text">お絵かき</span>
+            </button>
+        </div>
+        <!-- 日本時間時計ウィジェット -->
+        <div class="clock-widget fade-in">
+            <div class="clock-content">
+                <div class="clock-header">
+                    <span class="clock-icon">🕐</span>
+                    <span class="clock-label">日本時間</span>
+                </div>
+                <div class="clock-time">
+                    <div class="time-hours" id="clockHours">00</div>
+                    <div class="time-separator">:</div>
+                    <div class="time-minutes" id="clockMinutes">00</div>
+                    <div class="time-separator">:</div>
+                    <div class="time-seconds" id="clockSeconds">00</div>
+                </div>
+                <div class="clock-date">
+                    <div class="date-day" id="clockDay">月曜日</div>
+                    <div class="date-full" id="clockDate">2024年1月1日</div>
+                </div>
+            </div>
+        </div>
+        <!-- Canvasお絵かきオーバーレイ -->
+        <div class="drawing-overlay" id="drawingOverlay" style="display: none;">
+            <div class="drawing-container">
+                <div class="drawing-header">
+                    <h3 class="drawing-title">🎨 お絵かき</h3>
+                    <div class="drawing-controls">
+                        <div class="drawing-color-picker">
+                            <label for="drawingColor">色:</label>
+                            <input type="color" id="drawingColor" value="#3b82f6" title="色を選択">
+                        </div>
+                        <div class="drawing-size-picker">
+                            <label for="drawingSize">線の太さ:</label>
+                            <input type="range" id="drawingSize" min="1" max="20" value="5" title="線の太さ">
+                            <span id="drawingSizeValue">5</span>
+                        </div>
+                        <button class="drawing-clear" id="drawingClear" title="すべて削除">🗑️ クリア</button>
+                        <button class="drawing-close" id="drawingClose" title="閉じる">×</button>
+                    </div>
+                </div>
+                <canvas id="drawingCanvas"></canvas>
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">AIで未来を創造する</h1>
+            <p class="hero-subtitle fade-in-delay">株式会社ハマコーは、最先端のAI技術で<br>お客様のビジネスを革新します</p>
+            <button class="cta-button slide-in">お問い合わせ</button>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- 会社概要 -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">会社概要</h2>
+            <div class="about-content">
+                <div class="about-card scale-in">
+                    <div class="icon">🤖</div>
+                    <h3>AI技術のリーダー</h3>
+                    <p>最先端の機械学習と深層学習技術を駆使し、革新的なソリューションを提供しています。</p>
+                </div>
+                <div class="about-card scale-in-delay">
+                    <div class="icon">💡</div>
+                    <h3>イノベーション</h3>
+                    <p>最新のAI研究と実践的なアプリケーションを組み合わせ、ビジネス価値を創造します。</p>
+                </div>
+                <div class="about-card scale-in-delay-2">
+                    <div class="icon">🌐</div>
+                    <h3>グローバル展開</h3>
+                    <p>世界中の企業と協力し、AI技術の可能性を最大限に引き出します。</p>
+                </div>
+            </div>
+            <!-- 会社情報と地図 -->
+            <div class="company-info-section">
+                <div class="company-info-card fade-in">
+                    <h3 class="info-title">📍 所在地</h3>
+                    <div class="company-address">
+                        <p>〒890-0051</p>
+                        <p>鹿児島県鹿児島市玉里町１４－４５</p>
+                    </div>
+                    <div class="google-map-container">
+                        <iframe 
+                            id="googleMap"
+                            src="" 
+                            width="100%" 
+                            height="400" 
+                            style="border:0; border-radius: 15px;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="株式会社ハマコー所在地"
+                            class="google-map">
+                        </iframe>
+                        <div class="map-link-container">
+                            <a href="https://www.google.com/maps?q=鹿児島県鹿児島市玉里町１４－４５" target="_blank" rel="noopener noreferrer" class="map-link-button">
+                                <span class="map-link-icon">🗺️</span>
+                                <span>Googleマップで開く</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- サービス -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">サービス</h2>
+            <div class="services-grid">
+                <div class="service-card slide-in-left">
+                    <div class="service-icon">🔍</div>
+                    <h3>AIコンサルティング</h3>
+                    <p>お客様のビジネス課題を分析し、最適なAIソリューションを提案します。</p>
+                </div>
+                <div class="service-card slide-in-right">
+                    <div class="service-icon">⚙️</div>
+                    <h3>AIシステム開発</h3>
+                    <p>カスタマイズされたAIシステムを開発し、お客様の業務を効率化します。</p>
+                </div>
+                <div class="service-card slide-in-left">
+                    <div class="service-icon">📊</div>
+                    <h3>データ分析</h3>
+                    <p>ビッグデータを活用した高度な分析により、データドリブンな意思決定を支援します。</p>
+                </div>
+                <div class="service-card slide-in-right">
+                    <div class="service-icon">🎓</div>
+                    <h3>AI研修・教育</h3>
+                    <p>企業向けのAI研修プログラムを提供し、組織全体のAIリテラシーを向上させます。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- お問い合わせ -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">お問い合わせ</h2>
+            <form class="contact-form fade-in">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="お名前" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="メールアドレス" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" placeholder="お問い合わせ内容" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-button">送信</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 株式会社ハマコー. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
